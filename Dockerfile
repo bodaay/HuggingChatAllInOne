@@ -1,5 +1,5 @@
 # Building Back End First
-
+# This Docker file is created by combining Both dockerfiles from these two projects: https://github.com/huggingface/text-generation-inference,https://github.com/huggingface/chat-ui
 FROM lukemathwalker/cargo-chef:latest-rust-1.69 AS chef
 
 WORKDIR /usr/src
@@ -168,17 +168,47 @@ FROM base as sagemaker
 COPY ${BackEndSource}/sagemaker-entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
-# I remove this 
-# ENTRYPOINT ["./entrypoint.sh"]
+# Khalefa: In here I'll integrate now Web Chat -ui
+
+FROM node:19 as builder-production
+ARG FrontEndSource="Sources/HuggingChat/FrontEnd"
+ENV MONGODB_URL=mongodb://localhost:27017
+WORKDIR /app
+COPY .env.local ./
+COPY .env.local .
+COPY --link --chown=1000 ${FrontEndSource}/package-lock.json ${FrontEndSource}/package.json ./
+RUN --mount=type=cache,target=/app/.npm \
+        npm set cache /app/.npm && \
+        npm ci --omit=dev
+
+FROM builder-production as web-builder
+ARG FrontEndSource="Sources/HuggingChat/FrontEnd"
+ENV MONGODB_URL=mongodb://localhost:27017
+RUN --mount=type=cache,target=/app/.npm \
+        npm set cache /app/.npm && \
+        npm ci
+
+COPY .env.local .
+COPY --link --chown=1000 ${FrontEndSource}/. .
+
+RUN --mount=type=secret,id=DOTENV_LOCAL,dst=.env.local \
+    npm run build
+
+
+
+#End of Web Chat-ui Building
 
 # Final image
 FROM base
+ARG FrontEndSource="Sources/HuggingChat/FrontEnd"
+ENV MONGODB_URL=mongodb://localhost:27017
 
 # Install MongoDB
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         wget curl gnupg2 software-properties-common apt-transport-https ca-certificates lsb-release \
         ca-certificates \
         make
+
 
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg
 
@@ -188,15 +218,31 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
         mongodb-org \
         && rm -rf /var/lib/apt/lists/*
 
+# Install npm
+RUN curl -sL https://deb.nodesource.com/setup_19.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        nodejs \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g pm2
+
+# copy built web site content into final base image
+COPY --from=builder-production /app/node_modules /app/node_modules
+COPY --link --chown=1000 ${FrontEndSource}/package.json /app/package.json
+COPY --from=web-builder /app/build /app/build
+COPY .env.local /app/build/.env.local
+
 RUN mkdir -p /data/db
 
 # I removed this
 # ENTRYPOINT ["text-generation-launcher"]
-# My Custom Entry Point, starting mongo first, then text-generation, then web ui
+# My Custom Entry Point, starting mongo first,  then web ui,then text-generation
 COPY commands.sh /scripts/commands.sh
 RUN ["chmod", "+x", "/scripts/commands.sh"]
 
 ENTRYPOINT ["/scripts/commands.sh"]
 
 
-CMD ["--json-output"]
+# CMD ["--json-output"]

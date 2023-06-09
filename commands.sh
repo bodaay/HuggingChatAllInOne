@@ -4,6 +4,8 @@ mkdir -p /data/db /data/mongo-log/
 
 touch /data/mongo-log/mongod.log
 
-mongod --fork --logpath /data/mongo-log/mongod.log
+mongod --bind_ip_all --fork --logpath /data/mongo-log/mongod.log
 
-text-generation-launcher --port 8080
+pm2 start /app/build/index.js  # --no-daemon # I need it as daemon
+
+text-generation-launcher --port 1129
