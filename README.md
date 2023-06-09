@@ -1,6 +1,6 @@
 # Why
 
-Trying to build All in one docker to run HuggingChat Front and Back end in pod
+Trying to build All in one docker to run HuggingChat Front and Back end in runpod.io
 
 and the ability to run this docker in offline enviroment to test out lang models with multiple people
 
