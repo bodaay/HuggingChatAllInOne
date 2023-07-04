@@ -6,13 +6,12 @@ touch /data/mongo-log/mongod.log
 
 mongod --bind_ip_all --fork --logpath /data/mongo-log/mongod.log
 
-#Run out python dynamin env generator
+#Run our python dynamin env generator
 python3 /app/dynamic_env_generator.py
-# --node-args="-r dotenv/config"
-#pm2 start /app/build/index.js --no-daemon # I need it as daemon
 
-# npm install -g vite
-
+# rebuild the app after updating .env file
+cd /app/ && npm run build
+pm2 start /app/build/index.js #--no-daemon # I need it as daemon
 
 
 text-generation-launcher --port 1129
