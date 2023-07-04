@@ -183,7 +183,35 @@ FROM base as sagemaker
 COPY ${BackEndSource}/sagemaker-entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+# Khalefa: In here I'll integrate now Web Chat -ui
 
+FROM node:19 as builder-production
+ARG FrontEndSource="Sources/HuggingChat/FrontEnd"
+ENV MONGODB_URL=mongodb://localhost:27017
+WORKDIR /app
+COPY .env.local ./
+COPY .env.local .
+COPY --link --chown=1000 ${FrontEndSource}/package-lock.json ${FrontEndSource}/package.json ./
+RUN --mount=type=cache,target=/app/.npm \
+        npm set cache /app/.npm && \
+        npm ci --omit=dev
+
+FROM builder-production as web-builder
+ARG FrontEndSource="Sources/HuggingChat/FrontEnd"
+ENV MONGODB_URL=mongodb://localhost:27017
+RUN --mount=type=cache,target=/app/.npm \
+        npm set cache /app/.npm && \
+        npm ci
+
+COPY .env.local .
+COPY --link --chown=1000 ${FrontEndSource}/. .
+
+RUN --mount=type=secret,id=DOTENV_LOCAL,dst=.env.local \
+    npm run build
+
+
+
+#End of Web Chat-ui Building
 
 # Final image
 FROM base
@@ -192,20 +220,10 @@ ENV MONGODB_URL=mongodb://localhost:27017
 
 # Install MongoDB
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        wget curl gnupg2 software-properties-common apt-transport-https ca-certificates lsb-release python3 \
+        wget curl gnupg2 software-properties-common apt-transport-https ca-certificates lsb-release \
         ca-certificates \
         make
 
-# Install npm
-RUN curl -sL https://deb.nodesource.com/setup_19.x -o nodesource_setup.sh
-RUN bash nodesource_setup.sh
-
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        nodejs nano \
-        && rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g vite
-RUN npm install -g pm2
 
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg
 
@@ -215,42 +233,25 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
         mongodb-org \
         && rm -rf /var/lib/apt/lists/*
 
+# Install npm
+RUN curl -sL https://deb.nodesource.com/setup_19.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        nodejs nano \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g pm2
+# RUN npm install -g vite
+
+# copy built web site content into final base image
+COPY --from=builder-production /app/node_modules /app/node_modules
+COPY --link --chown=1000 ${FrontEndSource}/package.json /app/package.json
+COPY --from=web-builder /app/build /app/build
+COPY .env.local /app/build/.env.local
 
 RUN mkdir -p /data/db
 
-
-# I'll just copy the whole source for web-chat ui into the docker, and build it there
-
-COPY  ${FrontEndSource}/.eslintignore /app/
-COPY  ${FrontEndSource}/.eslintrc.cjs /app/
-COPY  ${FrontEndSource}/.npmrc /app/
-COPY  ${FrontEndSource}/.prettierignore /app/
-COPY  ${FrontEndSource}/.prettierrc /app/
-
-
-COPY  ${FrontEndSource}/LICENSE /app/
-COPY  ${FrontEndSource}/package-lock.json /app/
-COPY  ${FrontEndSource}/package.json /app/
-COPY  ${FrontEndSource}/postcss.config.js /app/
-COPY  ${FrontEndSource}/PRIVACY.md /app/
-COPY  ${FrontEndSource}/README.md /app/
-
-COPY  ${FrontEndSource}/svelte.config.js /app/
-COPY  ${FrontEndSource}/tailwind.config.cjs /app/
-COPY  ${FrontEndSource}/tsconfig.json /app/
-COPY  ${FrontEndSource}/vite.config.ts /app/
-
-COPY  ${FrontEndSource}/src/ /app/src/
-COPY  ${FrontEndSource}/static/ /app/static/
-
-# copy our .env file
-COPY .env.local /app/.env
-
-# do a test build, in order even to have all node_modules ready when we re-run in deployment
-RUN cd /app/ && npm install && npm run build
-
-# copy our python dymain env variable script generator
-COPY dynamic_env_generator.py /app/
 # I removed this
 # ENTRYPOINT ["text-generation-launcher"]
 # My Custom Entry Point, starting mongo first,  then web ui,then text-generation
