@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DockerTagName="ghcr.io/bodaay/huggingchatallinone/hugging-chat-full:1.0"
+DockerTagName="ghcr.io/bodaay/huggingchatallinone/hugging-chat-full:latest"
 
 DockerFileToBuild="Dockerfile"
 docker build -f $DockerFileToBuild -t $DockerTagName .
