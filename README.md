@@ -1,11 +1,19 @@
-## Why
+## HuggingChatAllInOne
 
-I like HuggingChat UI, and their text generation infra structure, so wanted to build All in one docker to run HuggingChat Front and Back end in on docker and on runpod.io
-and it should be fairly easilt to run this single docker offline given the models already downloaded
+I like HuggingChat UI, and their text generation infra structure, so wanted to build All in one docker file to run HuggingChat Frontend and Backend in one docker and on runpod.io
+and it should be fairly easily to run this single docker offline given the models already downloaded.
 
-The most difficult part was the fact .env variable parameters, some of them, were being integrated at build time, this made me choose the easiset path, dynamically generate .env variable and re-build the website at run time.
-In addition, Im checking if this is running under RunPOD.io, so I'll be setting the parameter PUBLIC_ORIGIN automatically (thankfully runpod.io providing env variable called RUNPOD_POD_ID)
+The project built in a way that it can be easily kept up-to-date with latest changed on the original repos:
+* https://github.com/huggingface/text-generation-inference/
+* https://github.com/huggingface/chat-ui
 
+
+## How it works
+
+mostly the docker file is just the combination of the two dockerfile from huggingface repos, but one difficult part was the fact .env variable parameters, some of them, were being integrated at build time, this made me choose the easiset path, dynamically generate .env variable and re-build the website at run time. and I added the logic to apply some patches to original source code in some cases where its needed
+
+
+In addition, Im checking if this is running under http://runpod.io, so I'll be setting the parameter PUBLIC_ORIGIN automatically (thankfully runpod.io providing env variable called RUNPOD_POD_ID)
 
 
 ## To Build
@@ -16,6 +24,7 @@ Building the docker image will take really long time...
 ./UpdateAllSources.sh
 ./BuildAllInOneDockerFile.sh
 ``` 
+* this will build up to the latest commit I've tested, you can modify the two script availble: GetLatestBackEndSources.sh, GetLatestFrontEnd.sh to choose different commit
 
 ## to Run 
 ```
@@ -37,6 +46,12 @@ https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 
 
 * Note that PUBLIC_ORIGIN will be automatically overwritten if you are running this under runpod.io
+
+
+## GPTQ Support
+
+Only Model made with latest gptq-for-llama will work
+
 ## Environment Variables
 
 | Variable Name                         | Default Value                                                  |
