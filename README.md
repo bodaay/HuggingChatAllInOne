@@ -51,9 +51,10 @@ docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://l
 | END_MESSAGE_TOKEN                     | <\/s>                                                   |
 | PREPROMPT                             | Below are a series of dialogues between various people and an AI assistant. The AI tries to be helpful, polite, honest, sophisticated, emotionally aware, and humble-but-knowledgeable. The assistant is happy to help with almost anything, and will do its best to understand exactly what is needed. It also tries to avoid giving false or misleading information, and it caveats when it isn't entirely sure about the right answer. That said, the assistant is practical and really does its best, and doesn't let caution get too much in the way of being useful.\n-----\n |
 | TEMPERATURE                           | 0.9                                                            |
-| TOP_K                                 | 1                                                              |
+| TOP_P                                 | 0.95                                                           |
+| TOP_K                                 | 50                                                             |
 | REPETITION_PENALTY                    | 1.2                                                            |
 | TRUNCATE                              | 1000                                                           |
-| MAX_NEW_TOKENS                        | 1512  
+| MAX_NEW_TOKENS                        | 1024  
 
 * Note that PUBLIC_ORIGIN will be automatically overwritten if you are running this under runpod.io

@@ -1,6 +1,5 @@
 import json
 import os
-
 target_file="/app/.env"
 
 EnvVariable = {}
@@ -50,12 +49,12 @@ Model_One['assistantMessageToken'] = os.environ['BOT_MESSAGE_TOKEN'] if 'BOT_MES
 Model_One['messageEndToken'] = os.environ['END_MESSAGE_TOKEN'] if 'END_MESSAGE_TOKEN' in os.environ else "<|eostoken|>"
 Model_One['preprompt'] = os.environ['PREPROMPT'] if 'PREPROMPT' in os.environ else "Below are a series of dialogues between various people and an AI assistant. The AI tries to be helpful, polite, honest, sophisticated, emotionally aware, and humble-but-knowledgeable. The assistant is happy to help with almost anything, and will do its best to understand exactly what is needed. It also tries to avoid giving false or misleading information, and it caveats when it isn't entirely sure about the right answer. That said, the assistant is practical and really does its best, and doesn't let caution get too much in the way of being useful.\n-----\n"
 Model_One['parameters']={}
-Model_One['parameters']['temperature'] = os.environ['TEMPERATURE'] if 'TEMPERATURE' in os.environ else 0.9
-Model_One['parameters']['top_p'] = os.environ['TOP_K'] if 'TOP_K' in os.environ else 0.95
-Model_One['parameters']['repetition_penalty'] = os.environ['REPETITION_PENALTY'] if 'REPETITION_PENALTY' in os.environ else 1.2
-Model_One['parameters']['top_k'] = os.environ['TOP_K'] if 'TOP_K' in os.environ else 1
-Model_One['parameters']['truncate'] = os.environ['TRUNCATE'] if 'TRUNCATE' in os.environ else 1000
-Model_One['parameters']['max_new_tokens'] = os.environ['MAX_NEW_TOKENS'] if 'MAX_NEW_TOKENS' in os.environ else 1024
+Model_One['parameters']['temperature'] = float(os.environ['TEMPERATURE']) if 'TEMPERATURE' in os.environ else 0.9
+Model_One['parameters']['top_p'] = float(os.environ['TOP_P']) if 'TOP_P' in os.environ else 0.95
+Model_One['parameters']['repetition_penalty'] = float(os.environ['REPETITION_PENALTY']) if 'REPETITION_PENALTY' in os.environ else 1.2
+Model_One['parameters']['top_k'] = int(os.environ['TOP_K'],10) if 'TOP_K' in os.environ else 50
+Model_One['parameters']['truncate'] = int(os.environ['TRUNCATE'],10) if 'TRUNCATE' in os.environ else 1000
+Model_One['parameters']['max_new_tokens'] = int(os.environ['MAX_NEW_TOKENS'],10) if 'MAX_NEW_TOKENS' in os.environ else 1024
 
 MODELS.append(Model_One)
 models_string=json.dumps(MODELS,indent=2)
