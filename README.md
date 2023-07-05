@@ -40,13 +40,9 @@ docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://l
 
 #### without Patches, gptq
 ```
-docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e QUANTIZE='gptq' -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e QUANTIZE='gptq' -e MODEL_ID='Ichigo2899/WIZVIC-7b-TGI-GPTQ' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
-#### without Patches, bitsanbytes
-```
-docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e QUANTIZE='bitsandbytes' -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
-```
 
  You need to set APPLY_PATCHES in the following cases for PUBLIC_ORIGIN:
 
