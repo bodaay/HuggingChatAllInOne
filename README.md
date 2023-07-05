@@ -27,8 +27,15 @@ Building the docker image will take really long time...
 * this will build up to the latest commit I've tested, you can modify the two script availble: GetLatestBackEndSources.sh, GetLatestFrontEnd.sh to choose different commit
 
 ## to Run 
+
+### (with Patches)
 ```
-docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e APPLY_PATCHES=1 -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e APPLY_PATCHES=1 -e PUBLIC_ORIGIN="http://exmaple.com:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+```
+
+### (without Patches)
+```
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
  You need to set APPLY_PATCHES in the following cases for PUBLIC_ORIGIN:
