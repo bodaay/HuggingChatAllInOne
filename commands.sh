@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 mkdir -p /data/db /data/mongo-log/
 
 touch /data/mongo-log/mongod.log
@@ -11,6 +13,7 @@ python3 /app/dynamic_env_generator.py
 
 # rebuild the app after updating .env file
 cd /app/ && npm run build
+export PORT=8080
 pm2 start /app/build/index.js #--no-daemon # I need it as daemon
 
 

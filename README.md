@@ -19,7 +19,7 @@ Building the docker image will take really long time...
 
 # to Run 
 ```
-docker run --gpus all -p 8080:80 -p 27017:27017 -p 1129:1129 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone/hugging-chat-full:latest
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
 
@@ -46,14 +46,14 @@ docker run --gpus all -p 8080:80 -p 27017:27017 -p 1129:1129 -v $PWD/Data:/data 
 | PARQUET_EXPORT_SECRET                 |                                                                |
 | PUBLIC_ORIGIN                         | http://localhost:8080                                          |
 | MODEL_ID                              | TheBloke/Wizard-Vicuna-7B-Uncensored-HF                        |
-| USER_MESSAGE_TOKEN                    | <|prompter|>                                                   |
-| BOT_MESSAGE_TOKEN                     | <|assistant|>                                                  |
-| END_MESSAGE_TOKEN                     | <|eostoken|>                                                   |
+| USER_MESSAGE_TOKEN                    | USER:                                                    |
+| BOT_MESSAGE_TOKEN                     | ASSISTANT:                                                  |
+| END_MESSAGE_TOKEN                     | <\/s>                                                   |
 | PREPROMPT                             | Below are a series of dialogues between various people and an AI assistant. The AI tries to be helpful, polite, honest, sophisticated, emotionally aware, and humble-but-knowledgeable. The assistant is happy to help with almost anything, and will do its best to understand exactly what is needed. It also tries to avoid giving false or misleading information, and it caveats when it isn't entirely sure about the right answer. That said, the assistant is practical and really does its best, and doesn't let caution get too much in the way of being useful.\n-----\n |
 | TEMPERATURE                           | 0.9                                                            |
 | TOP_K                                 | 1                                                              |
 | REPETITION_PENALTY                    | 1.2                                                            |
 | TRUNCATE                              | 1000                                                           |
-| MAX_NEW_TOKENS                        | 2048  
+| MAX_NEW_TOKENS                        | 1512  
 
 * Note that PUBLIC_ORIGIN will be automatically overwritten if you are running this under runpod.io

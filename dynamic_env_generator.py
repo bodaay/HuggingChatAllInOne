@@ -45,8 +45,8 @@ Model_One['endpoints'] = [{"url": "http://localhost:1129/generate_stream","autho
 
 Model_One['name'] = os.environ['MODEL_ID'] if 'MODEL_ID' in os.environ else "TheBloke/Wizard-Vicuna-7B-Uncensored-HF"
 
-Model_One['userMessageToken'] = os.environ['USER_MESSAGE_TOKEN'] if 'USER_MESSAGE_TOKEN' in os.environ else "<|prompter|>"
-Model_One['assistantMessageToken'] = os.environ['BOT_MESSAGE_TOKEN'] if 'BOT_MESSAGE_TOKEN' in os.environ else "<|assistant|>"
+Model_One['userMessageToken'] = os.environ['USER_MESSAGE_TOKEN'] if 'USER_MESSAGE_TOKEN' in os.environ else "USER: "
+Model_One['assistantMessageToken'] = os.environ['BOT_MESSAGE_TOKEN'] if 'BOT_MESSAGE_TOKEN' in os.environ else "ASSISTANT:"
 Model_One['messageEndToken'] = os.environ['END_MESSAGE_TOKEN'] if 'END_MESSAGE_TOKEN' in os.environ else "<|eostoken|>"
 Model_One['preprompt'] = os.environ['PREPROMPT'] if 'PREPROMPT' in os.environ else "Below are a series of dialogues between various people and an AI assistant. The AI tries to be helpful, polite, honest, sophisticated, emotionally aware, and humble-but-knowledgeable. The assistant is happy to help with almost anything, and will do its best to understand exactly what is needed. It also tries to avoid giving false or misleading information, and it caveats when it isn't entirely sure about the right answer. That said, the assistant is practical and really does its best, and doesn't let caution get too much in the way of being useful.\n-----\n"
 Model_One['parameters']={}
@@ -55,7 +55,7 @@ Model_One['parameters']['top_p'] = os.environ['TOP_K'] if 'TOP_K' in os.environ 
 Model_One['parameters']['repetition_penalty'] = os.environ['REPETITION_PENALTY'] if 'REPETITION_PENALTY' in os.environ else 1.2
 Model_One['parameters']['top_k'] = os.environ['TOP_K'] if 'TOP_K' in os.environ else 1
 Model_One['parameters']['truncate'] = os.environ['TRUNCATE'] if 'TRUNCATE' in os.environ else 1000
-Model_One['parameters']['max_new_tokens'] = os.environ['MAX_NEW_TOKENS'] if 'MAX_NEW_TOKENS' in os.environ else 2048
+Model_One['parameters']['max_new_tokens'] = os.environ['MAX_NEW_TOKENS'] if 'MAX_NEW_TOKENS' in os.environ else 1024
 
 MODELS.append(Model_One)
 models_string=json.dumps(MODELS,indent=2)
