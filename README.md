@@ -54,10 +54,19 @@ docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://l
 The most important parameter is: MODEL_ID
 this will the inference server based on that model
 
-```
-https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
-```
-* you can replace any of the parameters here and they will follow the default value, or you can use any other parameter from original repos of huggingface/chat-ui,huggingface/text-generation-inference
+I've created two templates, just to make it easy to go between GPTQ and HF format, they are basically same, just different Env parameters
+
+#### BoDaay - HuggingChatAllInOne - HF
+
+* https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
+
+#### BoDaay - HuggingChatAllInOne - GTPQ
+
+* https://runpod.io/gsc?template=2kkkk99tnd&ref=8s08lrw8
+
+
+
+you can replace any of the parameters here and they will follow the default value, or you can use any other parameter from original repos of huggingface/chat-ui,huggingface/text-generation-inference
 
 ![Alt text](./pics/ss.png)
 
