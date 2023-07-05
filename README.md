@@ -22,6 +22,12 @@ Building the docker image will take really long time...
 docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
+# Runpod Template 
+```
+https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
+```
+
+
 
 ## Environment Variables
 
