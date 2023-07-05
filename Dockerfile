@@ -251,6 +251,7 @@ RUN cd /app/ && npm install && npm run build
 
 # copy our python dymain env variable script generator
 COPY dynamic_env_generator.py /app/
+COPY patches.json /app/
 # I removed this
 # ENTRYPOINT ["text-generation-launcher"]
 # My Custom Entry Point, starting mongo first,  then web ui,then text-generation

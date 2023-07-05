@@ -1,4 +1,4 @@
-# Why
+## Why
 
 I like HuggingChat UI, and their text generation infra structure, so wanted to build All in one docker to run HuggingChat Front and Back end in on docker and on runpod.io
 and it should be fairly easilt to run this single docker offline given the models already downloaded
@@ -8,7 +8,7 @@ In addition, Im checking if this is running under RunPOD.io, so I'll be setting 
 
 
 
-# To Build
+## To Build
 
 Building the docker image will take really long time...
 
@@ -17,18 +17,26 @@ Building the docker image will take really long time...
 ./BuildAllInOneDockerFile.sh
 ``` 
 
-# to Run 
+## to Run 
 ```
-docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e APPLY_PATCHES=1 -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
-# Runpod Template 
+ You need to set APPLY_PATCHES in the following cases for PUBLIC_ORIGIN:
+
+* you are not running this in https://runpod.io, or a secure https connection
+* you need to access this site using ip address or non secure domain name (not http://localhost:8080), ex: http://10.0.0.1:8080, http://example.com
+
+## Runpod Template 
 ```
 https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 ```
+* you can replace any of the parameters here and they will follow the default value, or you can use any other parameter from original repos of huggingface/chat-ui,huggingface/text-generation-inference
+
+![Alt text](./pics/ss.png)
 
 
-
+* Note that PUBLIC_ORIGIN will be automatically overwritten if you are running this under runpod.io
 ## Environment Variables
 
 | Variable Name                         | Default Value                                                  |
@@ -63,4 +71,3 @@ https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 | TRUNCATE                              | 1000                                                           |
 | MAX_NEW_TOKENS                        | 1024  
 
-* Note that PUBLIC_ORIGIN will be automatically overwritten if you are running this under runpod.io

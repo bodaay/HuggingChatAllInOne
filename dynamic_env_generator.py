@@ -76,3 +76,24 @@ with open(target_file, 'w') as f:
             f.write(f'{key}={value}\n')
     f.write(f'MODELS=`{models_string}`\n')
     f.write(f'OLD_MODELS=`[]`\n')
+
+# still for development, we need to patch few things related to security with cookies, 
+
+APPLY_PATCHES = os.environ['APPLY_PATCHES'] if 'APPLY_PATCHES' in os.environ else False
+
+if not APPLY_PATCHES:
+    exit(0)
+print("Applying Source Files Paches")
+with open("/app/patches.json",'r') as pf:
+    pjson=json.loads(pf.read())
+    for f in pjson:
+        fileToPatch=f['name']
+        content=""
+        with open(fileToPatch,'r') as fpr:
+            content=str(fpr.read())
+        if content=="":
+            continue
+        with open(fileToPatch,'w') as fpw:
+            for patch in f['patches']:
+                content=content.replace(patch['findString'],patch['replaceString'])
+            fpw.write(content)

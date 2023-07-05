@@ -1,0 +1,21 @@
+[{
+    "name": "/app/src/lib/server/auth.ts",
+    "patches": [{
+        "findString": "sameSite: dev ? \"lax\" : \"none\"",
+        "replaceString": "sameSite: \"lax\""
+    }, {
+        "findString": "secure: !dev,",
+        "replaceString": "secure: false,"
+    }]
+},
+{
+    "name": "/app/src/routes/logout/+page.server.ts",
+    "patches": [{
+        "findString": "sameSite: dev ? \"lax\" : \"none\"",
+        "replaceString": "sameSite: \"lax\""
+    }, {
+        "findString": "secure: !dev,",
+        "replaceString": "secure: false,"
+    }]
+}
+]
