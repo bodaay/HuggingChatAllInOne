@@ -1,6 +1,6 @@
 # Building Back End First
 # This Docker file is created by combining Both dockerfiles from these two projects: https://github.com/huggingface/text-generation-inference,https://github.com/huggingface/chat-ui
-FROM lukemathwalker/cargo-chef:latest-rust-1.69 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.70 AS chef
 
 WORKDIR /usr/src
 
@@ -177,6 +177,11 @@ COPY --from=builder /usr/src/target/release/text-generation-router /usr/local/bi
 # Install launcher
 COPY --from=builder /usr/src/target/release/text-generation-launcher /usr/local/bin/text-generation-launcher
 
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        g++ \
+        && rm -rf /var/lib/apt/lists/*
+        
 # AWS Sagemaker compatbile image
 FROM base as sagemaker
 
