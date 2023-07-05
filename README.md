@@ -54,7 +54,7 @@ https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 | MODEL_ID                              | TheBloke/Wizard-Vicuna-7B-Uncensored-HF                        |
 | USER_MESSAGE_TOKEN                    | USER:                                                    |
 | BOT_MESSAGE_TOKEN                     | ASSISTANT:                                                  |
-| END_MESSAGE_TOKEN                     | <\/s>                                                   |
+| END_MESSAGE_TOKEN                     | <\|eostoken\|>                                                   |
 | PREPROMPT                             | Below are a series of dialogues between various people and an AI assistant. The AI tries to be helpful, polite, honest, sophisticated, emotionally aware, and humble-but-knowledgeable. The assistant is happy to help with almost anything, and will do its best to understand exactly what is needed. It also tries to avoid giving false or misleading information, and it caveats when it isn't entirely sure about the right answer. That said, the assistant is practical and really does its best, and doesn't let caution get too much in the way of being useful.\n-----\n |
 | TEMPERATURE                           | 0.9                                                            |
 | TOP_P                                 | 0.95                                                           |
