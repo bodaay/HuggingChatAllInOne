@@ -4,7 +4,7 @@ I like HuggingChat UI, and their text generation infra structure, so wanted to b
 and it should be fairly easilt to run this single docker offline given the models already downloaded
 
 The most difficult part was the fact .env variable parameters, some of them, were being integrated at build time, this made me choose the easiset path, dynamically generate .env variable and re-build the website at run time.
-In addition, I've checking if this is running under RunPOD.io, so I'll be setting the parameter PUBLIC_ORIGIN automatically (thankfully runpod.io providing env variable called RUNPOD_POD_ID)
+In addition, Im checking if this is running under RunPOD.io, so I'll be setting the parameter PUBLIC_ORIGIN automatically (thankfully runpod.io providing env variable called RUNPOD_POD_ID)
 
 
 
