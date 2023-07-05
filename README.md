@@ -3,7 +3,7 @@
 I like HuggingChat UI, and their text generation infra structure, so wanted to build All in one docker file to run HuggingChat Frontend and Backend in one docker and on runpod.io
 and it should be fairly easily to run this single docker offline given the models already downloaded.
 
-The project built in a way that it can be easily kept up-to-date with latest changed on the original repos:
+The project built in a way that it can be easily kept up-to-date with latest changes on the original repos:
 * https://github.com/huggingface/text-generation-inference/
 * https://github.com/huggingface/chat-ui
 
@@ -28,14 +28,24 @@ Building the docker image will take really long time...
 
 ## to Run 
 
-### (with Patches)
+#### with Patches, no quantization
 ```
 docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e APPLY_PATCHES=1 -e PUBLIC_ORIGIN="http://exmaple.com:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
-### (without Patches)
+#### without Patches, no quantization
 ```
 docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+```
+
+#### without Patches, gptq
+```
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e QUANTIZE='gptq' -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
+```
+
+#### without Patches, bitsanbytes
+```
+docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://localhost:8080" -e QUANTIZE='bitsandbytes' -e MODEL_ID='TheBloke/Wizard-Vicuna-7B-Uncensored-HF' ghcr.io/bodaay/huggingchatallinone:latest
 ```
 
  You need to set APPLY_PATCHES in the following cases for PUBLIC_ORIGIN:
@@ -44,6 +54,10 @@ docker run --gpus all -p 8080:8080 -v $PWD/Data:/data -e PUBLIC_ORIGIN="http://l
 * you need to access this site using ip address or non secure domain name (not http://localhost:8080), ex: http://10.0.0.1:8080, http://example.com
 
 ## Runpod Template 
+
+The most important parameter is: MODEL_ID
+this will the inference server based on that model
+
 ```
 https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 ```
@@ -57,7 +71,8 @@ https://runpod.io/gsc?template=k8qitdzihe&ref=8s08lrw8
 
 ## GPTQ Support
 
-Only Model made with latest gptq-for-llama will work
+Only Model made with latest gptq-for-llama will work, in case of GPTQ, you need pass QUANTIZE parameter and set it to gptq
+
 
 ## Environment Variables
 
