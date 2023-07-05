@@ -65,7 +65,7 @@ models_string=json.dumps(MODELS,indent=2)
 #check if we are running this under RunPOD, if this is correct, we can simply replace PUBLIC_ORIGIN with correct address
 EnvVariable['PUBLIC_ORIGIN'] = os.environ['PUBLIC_ORIGIN'] if 'PUBLIC_ORIGIN' in os.environ else "http://localhost:8080"
 if 'RUNPOD_POD_ID' in os.environ:
-    EnvVariable['PUBLIC_ORIGIN']="https://%s-8080.proxy.runpod.net"%(os.environ['PUBLIC_ORIGIN'])
+    EnvVariable['PUBLIC_ORIGIN']="https://%s-8080.proxy.runpod.net"%(os.environ['RUNPOD_POD_ID'])
 
 
 with open(target_file, 'w') as f:
